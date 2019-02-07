@@ -11,6 +11,10 @@
 
 #include <Vector3.h>
 #include <Matrix3.h>
+#include <MyVector3.h>
+
+#include <InitialMyMatrix3.h>
+
 
 
 
@@ -39,8 +43,11 @@ private:
 
 	Clock clock;
 	Time elapsed;
-
-	float rotationAngle = 0.0f;
+	float m_scale = 1.f;
+	float m_rotationAngleX = 1.f;
+	float m_rotationAngleY = 1.f;
+	float m_rotationAngleZ = 1.f;
+	MyVector3 m_displacmentVector{ 0,0,0 };
 };
 
 #endif
