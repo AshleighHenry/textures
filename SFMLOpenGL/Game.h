@@ -14,6 +14,7 @@
 
 
 
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
@@ -34,6 +35,7 @@ private:
 	void update();
 	void render();
 	void unload();
+	void initalizeVertex();
 
 	Clock clock;
 	Time elapsed;

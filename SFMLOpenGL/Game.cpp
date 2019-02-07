@@ -41,8 +41,8 @@ typedef struct
 	float texel[2];
 } Vertex;
 
-Vertex vertex[6];
-GLubyte triangles[6];
+Vertex vertex[36];
+GLubyte triangles[36];
 
 /* Variable to hold the VBO identifier and shader data */
 GLuint	index,		//Index to draw
@@ -82,44 +82,15 @@ void Game::initialize()
 	DEBUG_MSG(glGetString(GL_VERSION));
 
 	/* Vertices counter-clockwise winding */
-	vertex[0].coordinate[0] = -0.5f;
-	vertex[0].coordinate[1] = -0.5f;
-	vertex[0].coordinate[2] = 0.0f;
+	
 
-	vertex[1].coordinate[0] = -0.5f;
-	vertex[1].coordinate[1] = 0.5f;
-	vertex[1].coordinate[2] = 0.0f;
-
-	vertex[2].coordinate[0] = 0.5f;
-	vertex[2].coordinate[1] = 0.5f;
-	vertex[2].coordinate[2] = 0.0f;
- 
-	vertex[3].coordinate[0] = -0.5f;
-	vertex[3].coordinate[1] = -0.5f;
-	vertex[3].coordinate[2] = 0.0f;
-
-	vertex[4].coordinate[0] = 0.5f;
-	vertex[4].coordinate[1] = -0.5f;
-	vertex[4].coordinate[2] = 0.0f;
-
-	vertex[5].coordinate[0] = 0.5f;
-	vertex[5].coordinate[1] = 0.5f;
-	vertex[5].coordinate[2] = 0.0f;
-
-
-
-	vertex[0].texel[0] = 0.5f;
-	vertex[0].texel[1] = 0.5f;
-
-	vertex[1].texel[0] = 1.0f;
-	vertex[1].texel[1] = 1.0f;
-
-	vertex[2].texel[0] = 1.0f;
-	vertex[2].texel[1] = 0.0f;
+	initalizeVertex();
 
 	/*Index of Poly / Triangle to Draw */
-	triangles[0] = 0;   triangles[1] = 1;   triangles[2] = 2;
-	triangles[3] = 3; triangles[4] = 4; triangles[5] = 5;
+	for (int i = 0; i < 36; i++)
+	{
+		triangles[i] = i;
+	}
 
 	/* Create a new VBO using VBO id */
 	glGenBuffers(1, vbo);
@@ -133,7 +104,7 @@ void Game::initialize()
 
 	glGenBuffers(1, &index);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte) * 6, triangles, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte) * 36, triangles, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	/* Vertex Shader which would normally be loaded from an external file */
@@ -260,29 +231,8 @@ void Game::update()
 {
 	elapsed = clock.getElapsedTime();
 
-	if (elapsed.asSeconds() >= 1.0f)
-	{
-		clock.restart();
-
-		if (!flip)
-		{
-			flip = true;
-		}
-		else
-			flip = false;
-	}
-
-	if (flip)
-	{
-		rotationAngle += 0.005f;
-
-		if (rotationAngle > 360.0f)
-		{
-			rotationAngle -= 360.0f;
-		}
-	}
-
 	
+
 
 #if (DEBUG >= 2)
 	DEBUG_MSG("Update up...");
@@ -306,7 +256,7 @@ void Game::render()
 
 	/*	As the data positions will be updated by the this program on the
 		CPU bind the updated data to the GPU for drawing	*/
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 6, vertex, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 36, vertex, GL_STATIC_DRAW);
 
 	/*	Draw Triangle from VBO	(set where to start from as VBO can contain
 		model components that 'are' and 'are not' to be drawn )	*/
@@ -326,7 +276,7 @@ void Game::render()
 	glEnableVertexAttribArray(colorID);
 	glEnableVertexAttribArray(texelID);
 
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, (char*)NULL + 0);
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (char*)NULL + 0);
 
 	window.display();
 
@@ -340,5 +290,152 @@ void Game::unload()
 	glDeleteProgram(progID);
 	glDeleteBuffers(1, vbo);
 	stbi_image_free(img_data); //Free image
+}
+
+void Game::initalizeVertex()
+{
+	vertex[0].coordinate[0] = -0.5f;
+	vertex[0].coordinate[1] = -0.5f;
+	vertex[0].coordinate[2] = -0.5f;
+
+	vertex[1].coordinate[0] = -0.5f;
+	vertex[1].coordinate[1] = -0.5f;
+	vertex[1].coordinate[2] = 0.5f;
+
+	vertex[2].coordinate[0] = -0.5f;
+	vertex[2].coordinate[1] = 0.5f;
+	vertex[2].coordinate[2] = -0.5f;
+
+	vertex[3].coordinate[0] = 0.5f;
+	vertex[3].coordinate[1] = 0.5f;
+	vertex[3].coordinate[2] = -0.5f;
+
+	vertex[4].coordinate[0] = -0.5f;
+	vertex[4].coordinate[1] = -0.5f;
+	vertex[4].coordinate[2] = -0.5f;
+
+	vertex[5].coordinate[0] = -0.5f;
+	vertex[5].coordinate[1] = 0.5f;
+	vertex[5].coordinate[2] = -0.5f;
+
+	vertex[6].coordinate[0] = 0.5f;
+	vertex[6].coordinate[1] = -0.5f;
+	vertex[6].coordinate[2] = 0.5f;
+
+	vertex[7].coordinate[0] = -0.5f;
+	vertex[7].coordinate[1] = -0.5f;
+	vertex[7].coordinate[2] = -0.5f;
+
+	vertex[8].coordinate[0] = 0.5f;
+	vertex[8].coordinate[1] = -0.5f;
+	vertex[8].coordinate[2] = -0.5f;
+
+	vertex[9].coordinate[0] = 0.5f;
+	vertex[9].coordinate[1] = 0.5f;
+	vertex[9].coordinate[2] = -0.5f;
+
+	vertex[10].coordinate[0] = 0.5f;
+	vertex[10].coordinate[1] = -0.5f;
+	vertex[10].coordinate[2] = -0.5f;
+
+	vertex[11].coordinate[0] = -0.5f;
+	vertex[11].coordinate[1] = -0.5f;
+	vertex[11].coordinate[2] = -0.5f;
+
+	vertex[12].coordinate[0] = -0.5f;
+	vertex[12].coordinate[1] = -0.5f;
+	vertex[12].coordinate[2] = 0.5f;
+
+	vertex[13].coordinate[0] = -0.5f;
+	vertex[13].coordinate[1] = 0.5f;
+	vertex[13].coordinate[2] = 0.5f;
+
+	vertex[14].coordinate[0] = -0.5f;
+	vertex[14].coordinate[1] = 0.5f;
+	vertex[14].coordinate[2] = -0.5f;
+
+	vertex[15].coordinate[0] = 0.5f;
+	vertex[15].coordinate[1] = -0.5f;
+	vertex[15].coordinate[2] = 0.5f;
+
+	vertex[16].coordinate[0] = -0.5f;
+	vertex[16].coordinate[1] = -0.5f;
+	vertex[16].coordinate[2] = 0.5f;
+
+	vertex[17].coordinate[0] = -0.5f;
+	vertex[17].coordinate[1] = -0.5f;
+	vertex[17].coordinate[2] = -0.5f;
+
+	vertex[18].coordinate[0] = -0.5f;
+	vertex[18].coordinate[1] = 0.5f;
+	vertex[18].coordinate[2] = 0.5f;
+
+	vertex[19].coordinate[0] = -0.5f;
+	vertex[19].coordinate[1] = -0.5f;
+	vertex[19].coordinate[2] = 0.5f;
+
+	vertex[20].coordinate[0] = 0.5f;
+	vertex[20].coordinate[1] = -0.5f;
+	vertex[20].coordinate[2] = 0.5f;
+
+	vertex[21].coordinate[0] = 0.5f;
+	vertex[21].coordinate[1] = 0.5f;
+	vertex[21].coordinate[2] = 0.5f;
+
+	vertex[22].coordinate[0] = 0.5f;
+	vertex[22].coordinate[1] = -0.5f;
+	vertex[22].coordinate[2] = -0.5f;
+
+	vertex[23].coordinate[0] = 0.5f;
+	vertex[23].coordinate[1] = 0.5f;
+	vertex[23].coordinate[2] = -0.5f;
+
+	vertex[24].coordinate[0] = 0.5f;
+	vertex[24].coordinate[1] = -0.5f;
+	vertex[24].coordinate[2] = -0.5f;
+
+	vertex[25].coordinate[0] = 0.5f;
+	vertex[25].coordinate[1] = 0.5f;
+	vertex[25].coordinate[2] = 0.5f;
+
+	vertex[26].coordinate[0] = 0.5f;
+	vertex[26].coordinate[1] = -0.5f;
+	vertex[26].coordinate[2] = 0.5f;
+
+	vertex[27].coordinate[0] = 0.5f;
+	vertex[27].coordinate[1] = 0.5f;
+	vertex[27].coordinate[2] = 0.5f;
+
+	vertex[28].coordinate[0] = 0.5f;
+	vertex[28].coordinate[1] = 0.50f;
+	vertex[28].coordinate[2] = -0.5f;
+
+	vertex[29].coordinate[0] = -0.5f;
+	vertex[29].coordinate[1] = 0.5f;
+	vertex[29].coordinate[2] = -0.5f;
+
+	vertex[30].coordinate[0] = 0.5f;
+	vertex[30].coordinate[1] = 0.5f;
+	vertex[30].coordinate[2] = 0.5f;
+
+	vertex[31].coordinate[0] = -0.5f;
+	vertex[31].coordinate[1] = 0.5f;
+	vertex[31].coordinate[2] = -0.5f;
+
+	vertex[32].coordinate[0] = -0.5f;
+	vertex[32].coordinate[1] = 0.5f;
+	vertex[32].coordinate[2] = 0.5f;
+
+	vertex[33].coordinate[0] = 0.5f;
+	vertex[33].coordinate[1] = 0.5f;
+	vertex[33].coordinate[2] = 0.5f;
+
+	vertex[34].coordinate[0] = -0.5f;
+	vertex[34].coordinate[1] = 0.5f;
+	vertex[34].coordinate[2] = 0.5f;
+
+	vertex[35].coordinate[0] = 0.5f;
+	vertex[35].coordinate[1] = -0.5f;
+	vertex[35].coordinate[2] = 0.5f;
 }
 
